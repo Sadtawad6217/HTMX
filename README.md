@@ -1,28 +1,25 @@
 # HTMX-Go-Test
 
-## Overview
-
-This project demonstrates the integration of HTMX with a Go backend using the Echo framework. It includes API endpoints and web routes for managing posts.
-
 ## Getting Started
 
 ### Prerequisites
 
 - Go installed on your machine
-- Air for live reloading (install via `go install github.com/cosmtrek/air@latest`)
+- Air for live reloading (install via `go install github.com/air-verse/air@latest`)
 
 ### Installation
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/Sadtawad6217/htmx-go-test.git
+    git clone [ https://github.com/Sadtawad6217/HTMX ]
     cd htmx-go-test
     ```
 
 2. Install dependencies:
 
     ```bash
+
     go mod tidy
     ```
 
