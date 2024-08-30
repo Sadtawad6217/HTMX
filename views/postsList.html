@@ -1,0 +1,34 @@
+{{define "postsList"}}
+{{ range .Posts }}
+<div class="post" id="post-{{ .ID }}">
+    <div class="details">
+        <h2 class="title">{{ .Title }}</h2>
+        <p class="content">{{ .Content }}</p>
+    </div>
+    <div class="meta">
+        <span class="date">{{ .CreatedAt }}</span>
+        <div class="buttons">
+            <button class="edit-button" hx-get="/api/v1/posts/{{ .ID }}" hx-target="#editPost .popup-content"
+                hx-headers='{"Accept": "text/html"}' hx-swap="innerHTML" onclick="openPopup()">Edit</button>
+            {{ if not .Published }}
+            <button class="publish-button" hx-put="/api/v1/posts/{{ .ID }}" hx-vals='{"published": true}'
+                hx-target="#post-{{ .ID }}" hx-swap="delete">Publish</button>
+
+            <button class="delete-button" hx-delete="/api/v1/posts/{{ .ID }}" hx-target="closest .post"
+                hx-swap="delete">Delete</button>
+            {{ end }}
+        </div>
+    </div>
+</div>
+{{ end }}
+<div id="pagination">
+    <button id="prev-button" {{ if .PrevPage }} hx-get="/api/v1/posts?page={{ .PrevPage }}&published={{ .Published }}"
+        {{ else }}disabled{{ end }} hx-headers='{"Accept": "text/html"}' hx-target="#content">
+        Previous
+    </button>
+    <button id="next-button" {{ if .NextPage }} hx-get="/api/v1/posts?page={{ .NextPage }}&published={{ .Published }}"
+        {{ else }}disabled{{ end }} hx-headers='{"Accept": "text/html"}' hx-target="#content">
+        Next
+    </button>
+</div>
+{{end}}

@@ -1,0 +1,20 @@
+{{ define "postsUpdate" }}
+    <div class="details">
+        <h2 class="title">{{ .Post.Title }}</h2>
+        <p class="content">{{ .Post.Content }}</p>
+    </div>
+    <div class="meta">
+        <span class="date">{{ .Post.CreatedAt }}</span>
+        <div class="buttons">
+            <button class="edit-button" hx-get="/api/v1/posts/{{ .Post.ID }}" hx-target="#editPost .popup-content"
+                hx-headers='{"Accept": "text/html"}' hx-swap="innerHTML" onclick="openPopup()">Edit</button>
+            {{ if not .Post.Published }}
+            <button class="publish-button" hx-put="/api/v1/posts/{{ .Post.ID }}" hx-vals='{"published": true}'
+                hx-target="#post-{{ .Post.ID }}" hx-swap="delete">Publish</button>
+
+            <button class="delete-button" hx-delete="/api/v1/posts/{{ .Post.ID }}" hx-target="closest .post"
+                hx-swap="delete">Delete</button>
+            {{ end }}
+        </div>
+    </div>
+{{ end }}

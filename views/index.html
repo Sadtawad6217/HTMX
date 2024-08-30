@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Posts</title>
+    <script src="https://unpkg.com/htmx.org@latest"></script>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <script>
+        function loadInitialContent() {
+            document.getElementById('post-tab').click();
+        }
+        function clearForm() {
+            document.getElementById('post-form').reset();
+        }
+        function closePopup() {
+            document.getElementById("editPost").style.display = "none";
+        }
+        function openPopup() {
+            document.getElementById("editPost").style.display = "block";
+        }
+        function setActiveTab(tabId) {
+            document.querySelectorAll('.tabs button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'post-tab') {
+                document.getElementById('content').style.display = 'block';
+                document.getElementById('create-draft-form').style.display = 'none';
+            } else if (tabId === 'draft-tab') {
+                document.getElementById('content').style.display = 'block';
+                document.getElementById('create-draft-form').style.display = 'none';
+            } else if (tabId === 'create-draft-tab') {
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('create-draft-form').style.display = 'block';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.tabs button').forEach(button => {
+                button.addEventListener('click', function () {
+                    setActiveTab(this.id);
+                });
+            });
+
+            setActiveTab('post-tab');
+        });
+        function showCreateDraftForm() {
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('create-draft-form').style.display = 'block';
+        }
+        function resetView() {
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('create-draft-form').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', loadInitialContent);
+        function showSuccessPopup() {
+            document.getElementById('success-popup').style.display = 'block';
+        }
+        function closePopupSuccess() {
+            document.getElementById('success-popup').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Document loaded');
+
+            function showSuccessPopup() {
+                document.getElementById('success-popup').style.display = 'block';
+            }
+
+            function closePopupSuccess() {
+                document.getElementById('success-popup').style.display = 'none';
+            }
+
+            function handleResponse(event) {
+                const xhr = event.detail.xhr;
+                if (xhr && xhr.status === 201) {
+                    console.log('Status:', xhr.status);
+                    showSuccessPopup();
+                    clearForm();
+                }
+            }
+            document.body.addEventListener('htmx:afterRequest', handleResponse);
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="tabs" role="tablist">
+            <button id="post-tab" class="active" hx-get="/api/v1/posts" hx-target="#content" hx-swap="innerHTML"
+                hx-headers='{"Accept": "text/html"}' role="tab" aria-selected="true">
+                Posts
+            </button>
+            <button id="draft-tab" hx-get="/api/v1/posts?published=false" hx-target="#content" hx-swap="innerHTML"
+                hx-headers='{"Accept": "text/html"}' role="tab" aria-selected="false">
+                Drafts
+            </button>
+            <button id="create-draft-tab">
+                Create Draft
+            </button>
+        </div>
+        <div id="content">
+        </div>
+        <div id="create-draft-form">
+            <form id="post-form" hx-post="/api/v1/posts" hx-swap="none" hx-on="htmx:afterRequest">
+                <label for="title">Title:</label>
+                <input id="postTitle" name="title" placeholder="Title" type="text" required />
+                <label for="content">Content:</label>
+                <textarea id="postContent" name="content" placeholder="Content" required></textarea>
+
+                <div class="button-group">
+                    <button type="submit" name="published" value="true">Publish
+                        Now</button>
+                    <button type="submit" name="published" value="false">Save</button>
+                    <button type="button" onclick="clearForm()">Cancel</button>
+                </div>
+            </form>
+
+            <div id="success-popup" style="display: none;">
+                <p>สร้างสำเร็จ!</p>
+                <button onclick="closePopupSuccess()">close</button>
+            </div>
+        </div>
+    </div>
+    <div id="editPost" class="popup" style="display: none;">
+        <div class="popup-content">
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+{{ define "postsEdit" }}
+    <form hx-put="/api/v1/posts/{{ .Post.ID }}" hx-target="#post-{{ .Post.ID }}" hx-headers='{"Accept": "text/html"}' hx-swap="innerHTML" onsubmit="closePopup()">
+        <label for="postTitle">Title</label>
+        <input
+            id="postTitle"
+            name="title"
+            placeholder="Title"
+            type="text"
+            value="{{ .Post.Title }}"
+            required />
+
+        <label for="postContent">Content</label>
+        <textarea
+            id="postContent"
+            name="content"
+            placeholder="Content"
+            required>{{ .Post.Content }}</textarea>
+
+        <button type="submit">Save</button>
+
+        <button class="delete-button"
+            hx-delete="/api/v1/posts/{{ .Post.ID }}"
+            hx-target="#post-{{ .Post.ID }}"
+            hx-swap="delete"
+            onclick="closePopup()">Delete</button>
+
+        <button type="button" onclick="closePopup()">Cancel</button>
+    </form>
+{{ end }}
