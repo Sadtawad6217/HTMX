@@ -39,9 +39,3 @@
 
     You should see the application running.
 
-
-### Notes
-
-- The project uses two separate servers: Echo runs on port `8080`, and Fiber runs on port `8081`. Ensure that both ports are available.
-- Update `views/*.html` to match your template files.
-
